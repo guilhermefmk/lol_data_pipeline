@@ -1,0 +1,1 @@
+prefect deployment build etl_api_to_gcs.py:etl_api_to_gcs --name chaengers_to_local --apply
