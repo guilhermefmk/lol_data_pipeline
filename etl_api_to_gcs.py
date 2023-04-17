@@ -60,7 +60,7 @@ def write_local(df: pd.DataFrame) -> str:
     mes = datetime.datetime.now().month
     ano = datetime.datetime.now().year
     dataset_file = f'chalenger_{dia:02}-{mes:02}-{ano:02}'
-    folder_path = 'data'
+    folder_path = f'chalengers/{ano}/{mes}/{dia}'
     dir_path = os.path.join(folder_path)
     path = os.path.join(dir_path, dataset_file + '.csv')
 

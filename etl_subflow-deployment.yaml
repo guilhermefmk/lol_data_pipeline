@@ -1,15 +1,21 @@
 ###
-### A complete description of a Prefect Deployment for flow 'etl-api-to-gcs'
+### A complete description of a Prefect Deployment for flow 'etl-subflow'
 ###
-name: chalengers_to_gcs
+name: match_ids_to_gcs
 description: null
-version: 35643ee784b873e49f9424a46def493b
+version: d28356a377512c044083592bbe71d776
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
 parameters: {}
 schedule: null
 infra_overrides: {}
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: etl-subflow
+manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -18,17 +24,14 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
+  _block_document_id: 4fb784ff-96da-4b3b-a9b3-888bc7787741
+  _block_document_name: anonymous-2172435b-732a-4ea0-aa98-cee6e748e73a
+  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: etl-api-to-gcs
-manifest_path: null
 storage: null
 path: /home/guilhermefmk/workspace/DEzoomcamp_Final_project
-entrypoint: etl_api_to_gcs.py:etl_api_to_gcs
+entrypoint: etl_to_match_ids.py:etl_subflow
 parameter_openapi_schema:
   title: Parameters
   type: object
