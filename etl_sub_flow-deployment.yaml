@@ -3,7 +3,7 @@
 ###
 name: data_to_bq
 description: null
-version: 383ea315cdb5d4306d20e5baba71a311
+version: 4e4853906603118f1a5fa0f824ce157c
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
