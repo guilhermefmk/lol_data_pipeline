@@ -68,7 +68,7 @@ def struct_dict(dados) -> list:
     game_start = dados['info']['gameStartTimestamp']
     game_end = dados['info']['gameEndTimestamp']
     game_duration = dados['info']['gameDuration']
-
+    columns=['gameCreation','allInPings', 'assistMePings', 'assists', 'baitPings', 'baronKills', 'basicPings', 'bountyLevel', 'champExperience', 'champLevel', 'championId', 'championName', 'championTransform', 'commandPings', 'consumablesPurchased', 'damageDealtToBuildings', 'damageDealtToObjectives', 'damageDealtToTurrets', 'damageSelfMitigated', 'dangerPings', 'deaths', 'detectorWardsPlaced', 'doubleKills', 'dragonKills', 'eligibleForProgression', 'enemyMissingPings', 'enemyVisionPings', 'firstBloodAssist', 'firstBloodKill', 'firstTowerAssist', 'firstTowerKill', 'gameEndedInEarlySurrender', 'gameEndedInSurrender', 'getBackPings', 'goldEarned', 'goldSpent', 'holdPings', 'individualPosition', 'inhibitorKills', 'inhibitorTakedowns', 'inhibitorsLost', 'item0', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'itemsPurchased', 'killingSprees', 'kills', 'lane', 'largestCriticalStrike', 'largestKillingSpree', 'largestMultiKill', 'longestTimeSpentLiving', 'magicDamageDealt', 'magicDamageDealtToChampions', 'magicDamageTaken', 'needVisionPings', 'neutralMinionsKilled', 'nexusKills', 'nexusLost', 'nexusTakedowns', 'objectivesStolen', 'objectivesStolenAssists', 'onMyWayPings', 'participantId', 'pentaKills', 'physicalDamageDealt', 'physicalDamageDealtToChampions', 'physicalDamageTaken', 'profileIcon', 'pushPings', 'puuid', 'quadraKills', 'riotIdName', 'riotIdTagline', 'role', 'sightWardsBoughtInGame', 'spell1Casts', 'spell2Casts', 'spell3Casts', 'spell4Casts', 'summoner1Casts', 'summoner1Id', 'summoner2Casts', 'summoner2Id', 'summonerId', 'summonerLevel', 'summonerName', 'teamEarlySurrendered', 'teamId', 'teamPosition', 'timeCCingOthers', 'timePlayed', 'totalDamageDealt', 'totalDamageDealtToChampions', 'totalDamageShieldedOnTeammates', 'totalDamageTaken', 'totalHeal', 'totalHealsOnTeammates', 'totalMinionsKilled', 'totalTimeCCDealt', 'totalTimeSpentDead', 'totalUnitsHealed', 'tripleKills', 'trueDamageDealt', 'trueDamageDealtToChampions', 'trueDamageTaken', 'turretKills', 'turretTakedowns', 'turretsLost', 'unrealKills', 'visionClearedPings', 'visionScore', 'visionWardsBoughtInGame', 'wardsKilled', 'wardsPlaced', 'win']
     lista_participantes = []
     for p in participantes:
         d = {
@@ -84,6 +84,9 @@ def struct_dict(dados) -> list:
         p.pop('challenges', None)
         p.pop('perks', None)
         d.update(p)
+        for key in list(d):
+            if key not in columns:
+                d.pop(key, None)
         lista_participantes.append(d)
     return lista_participantes
 
@@ -118,11 +121,13 @@ def etl_data_match_to_bq_subflow():
     df_ids = fetch(path)
     df_main = get_main_df()
     for index, row in df_ids.iterrows():
+
         time.sleep(1)
         json_response = get_match_data(row['match_id'], header)
         dados_participantes = struct_dict(json_response)
         df_partida = pd.DataFrame(dados_participantes)
         df_main = pd.concat([df_main, df_partida], ignore_index=True)
+
     df_main['timestamp'] = pd.Timestamp.now().strftime('%Y-%m-%d')
     df_main = transform(df_main)
   
