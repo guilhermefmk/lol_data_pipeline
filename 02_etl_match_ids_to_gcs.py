@@ -29,8 +29,8 @@ def extract_from_gcs() -> Path:
     dia = datetime.datetime.now().day
     mes = datetime.datetime.now().month
     ano = datetime.datetime.now().year
-    dataset_file = f'chalenger_{dia:02}-{mes:02}-{ano:02}'
-    gcs_path = f"chalengers/{ano}/{mes}/{dia}/"
+    dataset_file = f'chalenger_{dia:02}-{mes:02}-{ano}'
+    gcs_path = f"chalengers/{ano}/{mes:02}/{dia:02}/"
     local_path = Path(f"./extract_from_gcs/")
     local_path.mkdir(parents=True, exist_ok=True)
     gcp_block = GcsBucket.load("lol-datalake")
@@ -59,8 +59,8 @@ def write_local(df: pd.DataFrame) -> str:
     dia = datetime.datetime.now().day
     mes = datetime.datetime.now().month
     ano = datetime.datetime.now().year
-    dataset_file = f'match_ids_{dia:02}-{mes:02}-{ano:02}'
-    folder_path = f'match_ids/{ano:02}/{mes:02}/{dia:02}'
+    dataset_file = f'match_ids_{dia:02}-{mes:02}-{ano}'
+    folder_path = f'match_ids/{ano}/{mes:02}/{dia:02}'
     dir_path = os.path.join(folder_path)
     path = os.path.join(dir_path, dataset_file + '.csv')
 
@@ -82,7 +82,7 @@ def write_gcs(path: str):
 
 
 @flow(log_prints=True)
-def etl_to_match_ids(list_match_ids) -> pd.DataFrame:
+def etl_match_ids_to_gcs(list_match_ids) -> pd.DataFrame:
     '''Main ETL flow to load data into Big Query(datawarehouse)'''
     df = pd.DataFrame(list_match_ids, columns=['match_id'])
     path = write_local(df)
@@ -90,7 +90,7 @@ def etl_to_match_ids(list_match_ids) -> pd.DataFrame:
     return df
 
 @flow(log_prints=True)
-def etl_subflow():
+def etl_match_ids_to_gcs_subflow():
     header = get_headers()
     path = extract_from_gcs()
     df = get_df_chalengers(path)
@@ -100,9 +100,9 @@ def etl_subflow():
         matches_ids_especific_summoner = get_match_ids_for_summoner(row['puuid'], header)
         matches_ids_global_raw.extend(matches_ids_especific_summoner)
     matches_ids_global_unique = set(matches_ids_global_raw)
-    etl_to_match_ids(matches_ids_global_unique)
+    etl_match_ids_to_gcs(matches_ids_global_unique)
 
 
 
 if __name__ == "__main__":
-    etl_subflow()
+    etl_match_ids_to_gcs_subflow()

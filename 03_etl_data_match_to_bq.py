@@ -29,8 +29,8 @@ def extract_from_gcs() -> Path:
     dia = datetime.datetime.now().day
     mes = datetime.datetime.now().month
     ano = datetime.datetime.now().year
-    dataset_file = f'match_ids_{dia:02}-{mes:02}-{ano:02}'
-    gcs_path = f"match_ids/{ano:02}/{mes:02}/{dia:02}"
+    dataset_file = f'match_ids_{dia:02}-{mes:02}-{ano}'
+    gcs_path = f"match_ids/{ano}/{mes:02}/{dia:02}"
     local_path = Path(f"./extract_from_gcs/")
     local_path.mkdir(parents=True, exist_ok=True)
     gcp_block = GcsBucket.load("lol-datalake")
@@ -104,24 +104,15 @@ def write_bq(df: pd.DataFrame) -> None:
         if_exists="append"
     )
 
-@task()
-def write_gcs(path: str):
-    gcp_block = GcsBucket.load("lol-datalake")
-    gcp_block.upload_from_path(
-        from_path=f'{path}',
-        to_path=path
-    )
-
-
 
 @flow(log_prints=True)
-def etl_data_match_to_gcs(df) -> pd.DataFrame:
+def etl_data_match_to_bq(df) -> pd.DataFrame:
     '''Main ETL flow to load data into Big Query(datawarehouse)'''
     write_bq(df)
     return df
 
 @flow(log_prints=True)
-def etl_sub_flow():
+def etl_data_match_to_bq_subflow():
     header = get_headers()
     path = extract_from_gcs()
     df_ids = fetch(path)
@@ -135,8 +126,8 @@ def etl_sub_flow():
     df_main['timestamp'] = pd.Timestamp.now().strftime('%Y-%m-%d')
     df_main = transform(df_main)
   
-    etl_data_match_to_gcs(df_main)
+    etl_data_match_to_bq(df_main)
 
 
 if __name__ == "__main__":
-    etl_sub_flow()
+    etl_data_match_to_bq_subflow()

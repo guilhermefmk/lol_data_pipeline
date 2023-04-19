@@ -4,7 +4,7 @@ import pandas as pd
 import time
 from prefect.blocks.system import Secret
 from prefect.filesystems import GCS
-from prefect_gcp import GcpCredentials, GcsBucket
+from prefect_gcp import GcsBucket
 from prefect import flow, task
 import os
 import datetime
@@ -59,8 +59,8 @@ def write_local(df: pd.DataFrame) -> str:
     dia = datetime.datetime.now().day
     mes = datetime.datetime.now().month
     ano = datetime.datetime.now().year
-    dataset_file = f'chalenger_{dia:02}-{mes:02}-{ano:02}'
-    folder_path = f'chalengers/{ano}/{mes}/{dia}'
+    dataset_file = f'chalenger_{dia:02}-{mes:02}-{ano}'
+    folder_path = f'chalengers/{ano}/{mes:02}/{dia:02}'
     dir_path = os.path.join(folder_path)
     path = os.path.join(dir_path, dataset_file + '.csv')
 
@@ -81,7 +81,7 @@ def write_gcs(path: str):
 
 
 @flow(log_prints=True)
-def etl_api_to_gcs() -> pd.DataFrame:
+def etl_chalengers_to_gcs() -> pd.DataFrame:
     header = get_headers()
     entries = get_entries(header)
     df = fetch(entries)
@@ -94,4 +94,4 @@ def etl_api_to_gcs() -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    etl_api_to_gcs()
+    etl_chalengers_to_gcs()

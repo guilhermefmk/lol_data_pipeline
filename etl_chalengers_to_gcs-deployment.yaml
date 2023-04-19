@@ -1,9 +1,9 @@
 ###
-### A complete description of a Prefect Deployment for flow 'etl-api-to-gcs'
+### A complete description of a Prefect Deployment for flow 'etl-chalengers-to-gcs'
 ###
-name: chalengers_to_gcs
+name: 01_chalengers_to_gcs
 description: null
-version: 35643ee784b873e49f9424a46def493b
+version: 2cce84372f9298cdf23cac49c675d5ed
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
@@ -24,11 +24,11 @@ infrastructure:
 ###
 ### DO NOT EDIT BELOW THIS LINE
 ###
-flow_name: etl-api-to-gcs
+flow_name: etl-chalengers-to-gcs
 manifest_path: null
 storage: null
 path: /home/guilhermefmk/workspace/DEzoomcamp_Final_project
-entrypoint: etl_api_to_gcs.py:etl_api_to_gcs
+entrypoint: 01_etl_chalengers_to_gcs.py:etl_chalengers_to_gcs
 parameter_openapi_schema:
   title: Parameters
   type: object

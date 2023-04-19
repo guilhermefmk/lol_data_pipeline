@@ -1,21 +1,15 @@
 ###
-### A complete description of a Prefect Deployment for flow 'etl-sub-flow'
+### A complete description of a Prefect Deployment for flow 'etl-data-match-to-bq-subflow'
 ###
-name: data_to_bq
+name: 03_data_match_to_bq
 description: null
-version: 4e4853906603118f1a5fa0f824ce157c
+version: 998a0130483933f14cd960a099edc579
 # The work queue that will handle this deployment's runs
 work_queue_name: default
 tags: []
 parameters: {}
 schedule: null
 infra_overrides: {}
-
-###
-### DO NOT EDIT BELOW THIS LINE
-###
-flow_name: etl-sub-flow
-manifest_path: null
 infrastructure:
   type: process
   env: {}
@@ -24,14 +18,17 @@ infrastructure:
   command: null
   stream_output: true
   working_dir: null
-  _block_document_id: 3ec1809e-3174-4538-b0f3-8ce01df0d9b3
-  _block_document_name: anonymous-3194ca05-c920-4aec-a883-4c4bfbbec527
-  _is_anonymous: true
   block_type_slug: process
   _block_type_slug: process
+
+###
+### DO NOT EDIT BELOW THIS LINE
+###
+flow_name: etl-data-match-to-bq-subflow
+manifest_path: null
 storage: null
 path: /home/guilhermefmk/workspace/DEzoomcamp_Final_project
-entrypoint: etl_gcs_to_bigquery.py:etl_sub_flow
+entrypoint: 03_etl_data_match_to_bq.py:etl_data_match_to_bq_subflow
 parameter_openapi_schema:
   title: Parameters
   type: object
