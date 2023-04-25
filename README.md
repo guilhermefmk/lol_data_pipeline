@@ -1,14 +1,14 @@
 # League of legends chalenger data match pipeline
 
 
-Este projeto realiza uma pipeline completa dos dados das partidas do ranque desafiante do jogo eletrônico league of legends fornecidos pela api oficial do jogo e por fim uma análise destes dados, essa análise busca responder perguntas como:
+This project performs a complete pipeline of the match data from the challenging rank of the electronic game league of legends provided by the game's official api and finally an analysis of this data, this analysis seeks to answer questions such as:
 
-* Quais personagens tem maior e menor taxa de vitória?  
-* Quais personagens aplicam a maior quantidade de dano por partida?
-* Quais personagens aplicam as maiores quantidades de dano fisico/magico por partida? 
-* Quais personagens aplicam mais frequentemente o first blood?
+* Which characters have the highest and lowest win rate?  
+* Which characters deal the most damage per match?
+* Which characters deal the highest amounts of physical/magical damage per match?
+* Which characters most often apply first blood?
 
-## Arquitetura do projeto
+## Project Architecture
 ![project architecture](/assets/img/MarineGEO_logo.png "project architecture")
 ## Setup
 ### Stack
@@ -118,18 +118,18 @@ prefect deployment build 03_etl_data_match_to_bq.py:etl_data_match_to_bq_subflow
 These scripts will be run every day below the chalenger queue resets, assim capturando as partidas dos novos jogadores que entraram no chalenger.
 
 ### 4. dbt/bigquery transformations
- Após o passo três o fluxo de dados irá gerar uma tabela chamada 'match_data_raw' no bigquery, a partir dela realizaremos transformações com o dbt e posteriormente o particionamento e clusterização da mesma com o bigquery.
+After step three, the data flow will generate a table called 'match_data_raw' in the bigquery, from which we will carry out transformations with the dbt and later partitioning and clustering it with the bigquery.
  #### dbt
- O repositório do projeto dbt se encontra em './dbt' ou acesse clicando [aqui](./dbt/).
- Foram utilizados 4 models para transformações com o dbt:
- * stg_data_match: Realiza transformações nas tipagens dos dados, exceto em timestamps.
- * prep_data_match: Realiza transformações nas tipagens dos dados, somente e timestamps.
- * row_numbers: Realiza um row_numbers() para identificar os registros duplicados.
- * refine_data_match: Adiciona uma coluna 'delete_case' que recebe não para o primeiro registro particionado pelo modelo row_numbers() e 'sim' para o restante
+The dbt project repository can be found at './dbt' or access it by clicking [here](./dbt/).
+ Four models were used for transformations with dbt:
+ * stg_data_match: Performs transformations on data types, except timestamps.
+ * prep_data_match: Performs transformations in data types, only in timestamps.
+ * row_numbers: Performs a row_numbers() to identify duplicate records.
+ * refine_data_match: Adds a 'delete_case' column that takes no for the first record partitioned by the row_numbers() model and 'yes' for the rest
 
 #### bigquery
-Neste momento temos uma tabela denominada "refine_data_match" com os dados duplicados sinalizados e com as tipagens corretas. A partir disso iremos particionar e clusterizar os dados realizando alguns filtros.
-Rode no bigquery o script presente no caminho './big_query/partitioning_and_clustering.sql', onde iremos particionar a tabela pela data de criação das partidas e clusterizar pelo nome dos personagens, dessa forma otimizaremos as consultas realizadas com o intuito de filtrar os campões jogados em certo periodo.
+At this moment we have a table called "refine_data_match" with the duplicate data flagged and with the correct typings. From there we will partition and cluster the data by performing some filters.
+Run the script present in the path './big_query/partitioning_and_clustering.sql' in bigquery, where we will partition the table by the date of creation of the matches and cluster by the name of the characters, in this way we will optimize the queries carried out in order to filter the champions played in a certain period.
 ```shell
 CREATE OR REPLACE TABLE `lol-data-project-383712.lol.match_data_clean`
 PARTITION BY DATE(gameCreation)
