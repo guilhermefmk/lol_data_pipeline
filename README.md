@@ -103,6 +103,23 @@ prefect orion start
 # Start the Prefect agent on default
 prefect agent start -q 'default'
 ```
+#### Firs script 01_etl_chalengers_to_gcs.py
+
+This script will use the entries(v4) and summoner(v4) endpoints to capture the 200 players in the currently challenging queue by adding their puuid to the df and writing a csv to the data lake(gcs). 
+
+#### Second script 02_etl_match_ids_to_gcs.py
+
+This script reads the last csv written by script one based on each puuid captures the match_ids of the players' matches using the match(v5) endpoint, with this a new csv is written only with the match ids in a second layer of the data lake( gcs).
+
+#### Second script 02_etl_match_ids_to_gcs.py
+
+This script reads the last csv written by script one based on each puuid captures the match_ids of the players' matches using the match(v5) endpoint, with this a new csv is written only with the match ids in a second layer of the data lake( gcs).
+
+#### Third script 03_etl_data_match_to_bq.py
+~
+This script uses the match(v5) endpoint to capture the data of the matches using the csv written by the second script with the match_ids listing, in this way we obtain a dataframe that is composed of each line being a player, that is, 10 lines for each match. After all the df assembly process it is written in bigquery as a table.
+
+#### deploy scripts
 ```shell
 # Realize the first script deploy with schedule for 01:00 AM for UTC -3
 prefect deployment build 01_etl_chalengers_to_gcs.py:etl_chalengers_to_gcs --name 01_chalengers_to_gcs --cron '0 1 * * *' --timezone 'America/Sao_Paulo' -a
