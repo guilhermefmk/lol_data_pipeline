@@ -9,7 +9,7 @@ This project performs a complete pipeline of the match data from the challenging
 * Which characters most often apply first blood?
 
 ## Project Architecture
-![project architecture](project_architecture.drawio.png"project architecture")
+![project architecture](project_architecture.drawio.png)
 ## Setup
 ### Stack
 
