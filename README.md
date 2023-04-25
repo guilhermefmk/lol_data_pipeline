@@ -9,7 +9,7 @@ This project performs a complete pipeline of the match data from the challenging
 * Which characters most often apply first blood?
 
 ## Project Architecture
-![project architecture](project_architecture.drawio.png)
+![project architecture](img/project_architecture.drawio.png)
 ## Setup
 ### Stack
 
@@ -139,7 +139,7 @@ SELECT * FROM `lol-data-project-383712.dbt_lol_project.refine_data_match` WHERE 
 ### 5. Data visualization with google data studio
 In this step you need to connect your table in bigquery with your google data studio account(tutorial [here](https://support.google.com/looker-studio/answer/6295968?hl=en#zippy=%2Cin-this-article)).
 Done this, you can elaborate a dashboard with data.
-![project dashboard](project_architecture.drawio.png"project dashboard")
+![dashboard](img/dashboard.png)
 
 
 
