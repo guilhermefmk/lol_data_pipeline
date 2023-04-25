@@ -2,6 +2,7 @@
 
 # Stack
 
+* Iac : Terraform
 * Cloud : GCP
 * Orquestração: Prefect
 * DL: GCS
