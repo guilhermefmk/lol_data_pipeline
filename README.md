@@ -9,7 +9,7 @@ This project performs a complete pipeline of the match data from the challenging
 * Which characters most often apply first blood?
 
 ## Project Architecture
-![project architecture](/assets/img/MarineGEO_logo.png "project architecture")
+![project architecture](project_architecture.drawio.png"project architecture")
 ## Setup
 ### Stack
 
